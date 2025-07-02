@@ -41,6 +41,21 @@ class TencentMapSdkApi : FlutterPlugin {
             result.success(null)
           }
           "getLocationOnce" -> {
+            var type = call.argument<String>("type")
+//            if(type != null) {
+//              if(type == 'WGS84'){
+//                locationManager.coordinateType = TencentLocationManager.COORDINATE_TYPE_WGS84
+//              }else{
+//                locationManager.coordinateType = TencentLocationManager.COORDINATE_TYPE_GCJ02
+//              }
+//            }
+            if (type != null) {
+              when (type) {
+                "WGS84" -> locationManager?.coordinateType = TencentLocationManager.COORDINATE_TYPE_WGS84
+                "GCJ02" -> locationManager?.coordinateType = TencentLocationManager.COORDINATE_TYPE_GCJ02
+                else -> locationManager?.coordinateType = TencentLocationManager.COORDINATE_TYPE_GCJ02 // Default
+              }
+            }
             getLocationOnce(result)
           }
           else -> {

@@ -209,11 +209,32 @@ class TencentMapMethodChannel {
     );
   }
 
-  Future<Map?> onceLocation(type) {
-    return _initializerChannel
-        .invokeMethod('getLocationOnce', <String, dynamic>{
-      "type": type,
-    });
+  /// 获取一次定位
+  /// type: WGS84, GCJ02, BD09LL
+  /// WGS84: 国际标准，GPS坐标(Google Earth使用、或者GPS模块)，谷歌地图
+  /// GCJ02: 中国坐标偏移标准，Google Map、高德、腾讯地图
+  /// BD09LL: 百度坐标偏移标准，百度地图
+  /// 默认使用GCJ02
+  Future<LocationData> onceLocation({String type = 'GCJ02'}) async {
+    try {
+      final result = await _initializerChannel.invokeMethod(
+        'getLocationOnce',
+        <String, dynamic>{'type': type},
+      );
+      if (result == null) {
+        throw LocationException(-1, 'No location data returned');
+      }
+      final locationData =
+          LocationData.fromMap(Map<String, dynamic>.from(result));
+      if (locationData.code != 0) {
+        // TencentLocation.ERROR_OK = 0
+        throw LocationException(locationData.code,
+            'Location request failed with code ${locationData.code}');
+      }
+      return locationData;
+    } catch (e) {
+      throw LocationException(-1, 'Unexpected error: $e');
+    }
   }
 
   /// 设置地图属性

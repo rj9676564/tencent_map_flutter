@@ -164,8 +164,8 @@ class TencentMap extends StatefulWidget {
   }
 
 //   once location
-  static Future<Map?> onceLocation() async {
-    return TencentMapMethodChannel.instance.onceLocation(1);
+  static Future<LocationData> onceLocation({String type = 'GCJ02'}) async {
+    return TencentMapMethodChannel.instance.onceLocation(type: type);
   }
 }
 
@@ -301,4 +301,59 @@ class TencentMapState extends State<TencentMap> {
     );
     TencentMapMethodChannel.instance.updateMapConfig(config, mapId: mapId);
   }
+}
+
+// Data model for location data
+class LocationData {
+  final String? name;
+  final double? latitude;
+  final double? longitude;
+  final String? address;
+  final String? city;
+  final String? province;
+  final String? area;
+  final String? cityCode;
+  final int? code;
+
+  LocationData({
+    this.name,
+    this.latitude,
+    this.longitude,
+    this.address,
+    this.city,
+    this.province,
+    this.area,
+    this.cityCode,
+    this.code,
+  });
+
+  factory LocationData.fromMap(Map<dynamic, dynamic> map) {
+    return LocationData(
+      name: map['name'] as String?,
+      latitude: map['latitude'] as double?,
+      longitude: map['longitude'] as double?,
+      address: map['address'] as String?,
+      city: map['city'] as String?,
+      province: map['province'] as String?,
+      area: map['area'] as String?,
+      cityCode: map['cityCode'] as String?,
+      code: map['code'] as int?,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'LocationData(name: $name, latitude: $latitude, longitude: $longitude, address: $address, city: $city, province: $province, area: $area, cityCode: $cityCode, code: $code)';
+  }
+}
+
+// Custom exception for location errors
+class LocationException implements Exception {
+  final int? code;
+  final String? message;
+
+  LocationException(this.code, this.message);
+
+  @override
+  String toString() => 'LocationException(code: $code, message: $message)';
 }
