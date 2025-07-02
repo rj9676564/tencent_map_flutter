@@ -209,6 +209,13 @@ class TencentMapMethodChannel {
     );
   }
 
+  Future<Map?> onceLocation(type) {
+    return _initializerChannel
+        .invokeMethod('getLocationOnce', <String, dynamic>{
+      "type": type,
+    });
+  }
+
   /// 设置地图属性
   Future<void> updateMapConfig(MapConfig config, {required int mapId}) {
     return _channel(mapId).invokeMethod(

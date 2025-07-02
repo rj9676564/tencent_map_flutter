@@ -51,8 +51,11 @@ android {
     }
 
     dependencies {
-        implementation 'com.tencent.map:tencent-map-vector-sdk:5.1.0'
-        implementation 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.4.9'
+        // 地图
+        implementation 'com.tencent.map:tencent-map-vector-sdk:6.4.0.250610.3d76dfd6.160361269'
+        // 基础库
+        implementation 'com.tencent.openmap:foundation:0.6.0.0454c7c-lite'
+        implementation 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.6.1'
 
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'org.mockito:mockito-core:5.0.0'

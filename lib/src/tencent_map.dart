@@ -162,6 +162,11 @@ class TencentMap extends StatefulWidget {
   static Future<void> init({bool agreePrivacy = false}) {
     return TencentMapMethodChannel.instance.agreePrivacy(agreePrivacy);
   }
+
+//   once location
+  static Future<Map?> onceLocation() async {
+    return TencentMapMethodChannel.instance.onceLocation(1);
+  }
 }
 
 class TencentMapState extends State<TencentMap> {
