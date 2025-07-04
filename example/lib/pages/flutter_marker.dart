@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:screenshot/screenshot.dart';
+// import 'package:screenshot/screenshot.dart';
 import 'package:tencent_map_flutter/tencent_map_flutter.dart';
 
 import '../utils.dart';
@@ -19,22 +19,19 @@ class FlutterMarkerPage extends StatefulWidget {
 
 class _FlutterMarkerPageState extends State<FlutterMarkerPage> {
   late TencentMapController controller;
-  final screenshot = ScreenshotController();
+  // final screenshot = ScreenshotController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text(FlutterMarkerPage.title)),
       body: Stack(children: [
-        Screenshot(
-          controller: screenshot,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Colors.white,
-              child: const FlutterLogo(size: 32),
-            ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Colors.white,
+            child: const FlutterLogo(size: 32),
           ),
         ),
         Material(
@@ -51,12 +48,12 @@ class _FlutterMarkerPageState extends State<FlutterMarkerPage> {
   void onMapCreated(TencentMapController controller) async {
     const position = LatLng(39.909, 116.397);
     controller.moveCamera(CameraPosition(position: position));
-    final image = await screenshot.capture();
+    // final image = await screenshot.capture();
     controller.addMarker(
       Marker(
         id: "flutter_marker_id",
         position: position,
-        icon: Bitmap(bytes: image),
+        // icon: Bitmap(bytes: image),
       ),
     );
   }

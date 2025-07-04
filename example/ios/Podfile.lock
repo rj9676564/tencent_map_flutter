@@ -4,12 +4,12 @@ PODS:
     - Flutter
   - permission_handler_apple (9.1.1):
     - Flutter
-  - Tencent-MapFoundation (3.6.0)
-  - Tencent-MapSDK (5.1.0):
-    - Tencent-MapFoundation (>= 3.3.0)
+  - Tencent-MapFoundation (5.1.0)
+  - Tencent-MapSDK (6.3.2):
+    - Tencent-MapFoundation (>= 5.0.2)
   - tencent_map_flutter (0.0.1):
     - Flutter
-    - Tencent-MapSDK (~> 5.1.0)
+    - Tencent-MapSDK (~> 6.3.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -34,12 +34,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: 13825b8a9334a850581300559b8839134b124670
-  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
-  Tencent-MapFoundation: 0e99a06d9a7585960c273c3ab3163cb8ec3ad1c9
-  Tencent-MapSDK: 3af9389c260dada3b351518afb4a919ea5f49ee5
-  tencent_map_flutter: 6abee6c0ba2d063b3709fbc104fe3176400fe015
+  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
+  permission_handler_apple: 3787117e48f80715ff04a3830ca039283d6a4f29
+  Tencent-MapFoundation: b7e8775acc14d9d9c657507f4a262ec4e5415882
+  Tencent-MapSDK: e76c824673f9a918a079eb318c5664d9f5e1af32
+  tencent_map_flutter: babb5e2d040e8cd1c86767acda03d9310577e573
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

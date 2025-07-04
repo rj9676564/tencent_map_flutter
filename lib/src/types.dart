@@ -632,3 +632,153 @@ class UIControlPosition {
     );
   }
 }
+
+/// A data class representing geographic information for a point of interest (POI) from Tencent Map SDK.
+class TencentMapGeoInfo {
+  final String? address;
+  double? latitude;
+  double? longitude;
+  String? title;
+
+  final String? province;
+  final String? city;
+  final String? district;
+
+  /// Creates a [TencentMapGeoInfo] instance with optional fields.
+  TencentMapGeoInfo({
+    this.address,
+    this.latitude,
+    this.longitude,
+    this.title,
+    this.province,
+    this.city,
+    this.district,
+  });
+
+  /// Creates a [TencentMapGeoInfo] instance from a JSON map.
+  ///
+  /// The JSON map is expected to contain 'address', 'latitude', 'longitude', and 'title' keys.
+  /// - 'latitude' and 'longitude' are parsed as doubles.
+  /// - Returns null for fields if the corresponding JSON key is missing or invalid.
+  factory TencentMapGeoInfo.fromJson(Map<Object?, Object?> json) {
+    return TencentMapGeoInfo(
+      address: json['address'] as String?,
+      latitude: json['latitude'] is num
+          ? (json['latitude'] as num?)?.toDouble()
+          : null,
+      longitude: json['longitude'] is num
+          ? (json['longitude'] as num?)?.toDouble()
+          : null,
+      title: json['title'] as String?,
+      province: json['province'] as String?,
+      city: json['city'] as String?,
+      district: json['district'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'province': province,
+      'city': city,
+      'district': district,
+      'title': title,
+      'address': address,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
+}
+
+/// 定位信息
+class LocationInfo {
+  /// 构造函数
+  const LocationInfo({
+    required this.latitude,
+    required this.longitude,
+    required this.code,
+    required this.altitude,
+    this.name,
+    this.address,
+    this.city,
+    this.province,
+    this.district,
+    this.street,
+  });
+
+  /// 从 Map 创建 LocationInfo 对象
+  factory LocationInfo.fromMap(Map<dynamic, dynamic> map) {
+    return LocationInfo(
+      latitude: map['latitude'] as double,
+      longitude: map['longitude'] as double,
+      code: map['code'] as int,
+      altitude: map['altitude'] as double,
+      name: map['name'] as String?,
+      address: map['address'] as String?,
+      city: map['city'] as String?,
+      province: map['province'] as String?,
+      district: map['district'] as String?,
+      street: map['street'] as String?,
+    );
+  }
+
+  /// 纬度
+  final double latitude;
+
+  /// 经度
+  final double longitude;
+
+  /// 状态码
+  final int code;
+
+  /// 海拔
+  final double altitude;
+
+  /// 位置名称
+  final String? name;
+
+  /// 详细地址
+  final String? address;
+
+  /// 城市
+  final String? city;
+
+  /// 省份
+  final String? province;
+
+  /// 区域
+  final String? district;
+
+  /// 街道
+  final String? street;
+
+  /// 转换为 Map
+  Map<String, dynamic> toMap() {
+    return {
+      'latitude': latitude,
+      'longitude': longitude,
+      'code': code,
+      'altitude': altitude,
+      'name': name,
+      'address': address,
+      'city': city,
+      'province': province,
+      'district': district,
+      'street': street,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'LocationInfo('
+        'latitude: $latitude, '
+        'longitude: $longitude, '
+        'code: $code, '
+        'altitude: $altitude, '
+        'name: $name, '
+        'address: $address, '
+        'city: $city, '
+        'province: $province, '
+        'district: $district, '
+        'street: $street)';
+  }
+}

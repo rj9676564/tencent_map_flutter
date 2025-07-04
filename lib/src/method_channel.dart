@@ -200,11 +200,12 @@ class TencentMapMethodChannel {
   }
 
   /// 同意隐私协议，显示地图前必须调用
-  Future<void> agreePrivacy(bool agree) {
+  Future<void> agreePrivacy(bool agree, String? apiKey) {
     return _initializerChannel.invokeMethod(
       "agreePrivacy",
       <String, dynamic>{
         "agree": agree,
+        "apiKey": apiKey,
       },
     );
   }
@@ -235,6 +236,56 @@ class TencentMapMethodChannel {
     } catch (e) {
       throw LocationException(-1, 'Unexpected error: $e');
     }
+  }
+
+  /// POI搜索
+  Future<List<TencentMapGeoInfo>> poiSearchMap({
+    required String city,
+    required String keyWord,
+    String? apiKey,
+    String? secretKey,
+  }) async {
+    try {
+      final result = await _initializerChannel.invokeMethod('poiSearchMap', {
+        'city': city,
+        'keyWord': keyWord,
+        'apiKey': apiKey,
+        'secretKey': secretKey
+      });
+
+      // 确保result是List<dynamic>
+      if (result is List<dynamic>) {
+        // 将List<dynamic>转换为List<Map<String, dynamic>>
+        return result.cast<Map<dynamic, dynamic>>().map((item) {
+          // 确保每个item是Map，并将键转换为String
+          return TencentMapGeoInfo.fromJson(item as Map<Object?, Object?>);
+        }).toList();
+      } else {
+        // 如果result不是List，抛出错误
+        throw PlatformException(
+          code: 'INVALID_RESULT_TYPE',
+          message: 'Expected List<dynamic>, but got ${result.runtimeType}',
+        );
+      }
+    } on PlatformException catch (e) {
+      print('POI search failed: ${e.code}, ${e.message}, ${e.details}');
+      return [];
+    }
+  }
+
+  Future<TencentMapGeoInfo> geo2address({
+    required double latitude,
+    required double longitude,
+    String? apiKey,
+    String? secretKey,
+  }) async {
+    final result = await _initializerChannel.invokeMethod('geo2address', {
+      'latitude': latitude,
+      'longitude': longitude,
+      'apiKey': apiKey,
+      'secretKey': secretKey,
+    });
+    return TencentMapGeoInfo.fromJson(result as Map<Object?, Object?>);
   }
 
   /// 设置地图属性

@@ -153,19 +153,50 @@ class TencentMap extends StatefulWidget {
   /// 当点击地图上的定位标会触发该回调
   final void Function(LatLng)? onUserLocationClick;
 
+  /// 腾讯地图 API Key
+  static String? apiKey;
+
+  /// 腾讯地图 Secret Key
+  static String? secretKey;
+
   @override
   createState() => TencentMapState();
 
   /// 初始化 SDK，显示地图前必须调用
   ///
   /// 请确保用户同意腾讯地图 SDK 隐私协议并设置 [agreePrivacy] = true
-  static Future<void> init({bool agreePrivacy = false}) {
-    return TencentMapMethodChannel.instance.agreePrivacy(agreePrivacy);
+  static Future<void> init(
+      {bool agreePrivacy = false, String? apiKey, String? secretKey}) {
+    TencentMap.apiKey = apiKey;
+    TencentMap.secretKey = secretKey;
+    return TencentMapMethodChannel.instance.agreePrivacy(agreePrivacy, apiKey);
   }
 
 //   once location
   static Future<LocationData> onceLocation({String type = 'GCJ02'}) async {
     return TencentMapMethodChannel.instance.onceLocation(type: type);
+  }
+
+  static Future<List<TencentMapGeoInfo>> poiSearchMap({
+    required String city,
+    required String keyWord,
+  }) async {
+    return TencentMapMethodChannel.instance.poiSearchMap(
+        city: city,
+        keyWord: keyWord,
+        secretKey: TencentMap.secretKey,
+        apiKey: TencentMap.apiKey);
+  }
+
+  static Future<TencentMapGeoInfo> geo2address({
+    required double latitude,
+    required double longitude,
+  }) async {
+    return TencentMapMethodChannel.instance.geo2address(
+        latitude: latitude,
+        longitude: longitude,
+        secretKey: TencentMap.secretKey,
+        apiKey: TencentMap.apiKey);
   }
 }
 
