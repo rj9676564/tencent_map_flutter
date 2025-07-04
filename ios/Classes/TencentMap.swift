@@ -7,7 +7,7 @@ class TencentMap: NSObject, FlutterPlatformView {
 
   init(frame: CGRect, viewId: Int64, registrar: FlutterPluginRegistrar, args: [String: Any?]?) {
     mapView = QMapView()
-    let api = _TencentMapApi(mapView: mapView)
+    let api = _TencentMapApi(mapView: mapView,)
     let controller = TencentMapController(viewId: viewId, registrar: registrar, api: api)
     mapViewDelegate = TencentMapViewDelegate(registrar, mapView: mapView, controller: controller)
     super.init()

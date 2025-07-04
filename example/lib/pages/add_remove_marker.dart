@@ -47,11 +47,14 @@ class _AddRemoveMarkerPageState extends State<AddRemoveMarkerPage> {
   }
 
   void onTap(LatLng position) async {
+    if (_markerIdCounter > 2) {
+      return;
+    }
     final String markerId = 'marker_id_${_markerIdCounter++}';
     final marker = Marker(
       id: markerId,
       position: position,
-      icon: Bitmap(asset: 'images/marker.png'),
+      icon: Bitmap(asset: 'images/gps_map.png'),
       anchor: Anchor(x: 0.5, y: 1),
       draggable: true,
     );
@@ -60,7 +63,12 @@ class _AddRemoveMarkerPageState extends State<AddRemoveMarkerPage> {
   }
 
   void onTapMarker(String markerId) {
-    controller.removeMarker(markerId);
-    markers.remove(markerId);
+    controller.updateMarker(
+        markerId,
+        MarkerUpdateOptions(
+          anchor: Anchor(x: 0.5, y: 1),
+          draggable: true,
+          icon: Bitmap(asset: 'images/marker.png'),
+        ));
   }
 }

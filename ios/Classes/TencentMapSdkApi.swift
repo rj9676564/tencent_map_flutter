@@ -3,6 +3,8 @@ import Foundation
 import QMapKit
 import TencentLBS
 
+
+
 class TencentMapSdkApi: NSObject, QMSSearchDelegate {
     static var locationManager: TencentLBSLocationManager?
     static var search: QMSSearcher?
@@ -10,8 +12,13 @@ class TencentMapSdkApi: NSObject, QMSSearchDelegate {
     static var pendingLatitude: Double?
     static var pendingLongitude: Double?
     
-    static func register(with messenger: FlutterBinaryMessenger) {
-        let channel = FlutterMethodChannel(name: "plugins.flutter.dev/tencent_map_flutter_initializer", binaryMessenger: messenger)
+    static func agreePrivacy(agreePrivacy: Bool) {
+        QMapServices.shared().setPrivacyAgreement(agreePrivacy)
+        TencentLBSLocationManager.setUserAgreePrivacy(agreePrivacy)
+    }
+
+    static func setup( registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "plugins.flutter.dev/tencent_map_flutter_initializer", binaryMessenger: registrar.messenger())
         channel.setMethodCallHandler { call, result in
             switch call.method {
             case "agreePrivacy":

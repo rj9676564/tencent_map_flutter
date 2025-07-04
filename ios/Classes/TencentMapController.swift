@@ -159,7 +159,7 @@ class TencentMapController: NSObject {
     ] as [String: Any])
   }
 
-  /// 当开始拖动点标记时触发该回调（Android Only）
+  /// 当开始拖动点标记时触发该                                                              回调（Android Only）
   func onMarkerDragStart(markerId: String, position: Position) {
     channel.invokeMethod("onMarkerDragStart", arguments: [
       "markerId": markerId,

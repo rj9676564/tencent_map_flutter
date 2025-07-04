@@ -4,6 +4,7 @@ import Flutter
 class _TencentMapApi: NSObject {
   let mapView: QMapView
   var markers = [String: QPointAnnotation]()
+weak var controller: TencentMapController? // 添加对 TencentMapController 的引用
 
   init(mapView: QMapView) {
     self.mapView = mapView
@@ -12,10 +13,10 @@ class _TencentMapApi: NSObject {
   func updateMapConfig(config: MapConfig) {
     if let type = config.mapType {
       mapView.mapType = [
-        MapType.dark: QMapType.dark,
-        MapType.normal: QMapType.standard,
-        MapType.satellite: QMapType.satellite,
-      ][type] ?? QMapType.standard
+        MapType.dark: QMapType.typeDark,
+        MapType.normal: QMapType.typeStandard,
+        MapType.satellite: QMapType.typeSatellite,
+      ][type] ?? QMapType.typeStandard
     }
     if let index = config.mapStyle {
       mapView.setMapStyle(Int32(index))
@@ -72,6 +73,15 @@ class _TencentMapApi: NSObject {
       mapView.showsUserLocation = enabled
     }
   }
+    
+    // 实现 QMapViewDelegate 的 marker 点击事件
+    func mapView(_ mapView: QMapView!, didTap annotation: QAnnotation!) {
+        // 确保 annotation 是 QPointAnnotation 且存在于 markers 中
+        if let pointAnnotation = annotation as? QPointAnnotation,
+           let markerId = markers.first(where: { $0.value === pointAnnotation })?.key {
+            controller?.onTapMarker(markerId: markerId)
+        }
+    }
 
   func moveCamera(position: CameraPosition, duration: Int64) {
     let animated = duration > 0
@@ -102,9 +112,11 @@ class _TencentMapApi: NSObject {
   }
 
   func addMarker(marker: Marker) {
-    let annotation = marker.annotation
+    let annotation:QPointAnnotation = marker.annotation
     markers[marker.id] = annotation
+      
     mapView.addAnnotation(annotation)
+      
   }
 
   func removeMarker(id: String) {

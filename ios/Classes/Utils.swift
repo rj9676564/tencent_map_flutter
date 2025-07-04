@@ -118,6 +118,7 @@ extension Marker {
       "draggable": draggable,
       "icon": icon,
       "anchor": point,
+      "id":id
     ] as [String: Any?]
     return annotation
   }

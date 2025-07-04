@@ -20,6 +20,43 @@ class TencentMapViewDelegate: NSObject, QMapViewDelegate {
     self.controller = controller
   }
 
+//    didSelectAnnotationView
+    func mapView(_ mapView: QMapView!, didSelect view: QAnnotationView!) {
+        print("didSelect \(view.isDraggable)");
+        
+    }
+
+    func mapView(_ mapView: QMapView!, didTap overlay: (any QOverlay)!, coordinate: CLLocationCoordinate2D) {
+        
+        print("customCalloutView did Tap");
+    }
+    
+    func mapView(_ mapView: QMapView!, didAdd views: [QAnnotationView]!) {
+        print("customCalloutView did Add");
+        
+    }
+    func mapView(_ mapView: QMapView!, didAnnotationViewTapped view: QAnnotationView!) {
+        guard let annotation = view.annotation as? QPointAnnotation else {
+                print("Error: Annotation is not a QPointAnnotation")
+                return
+            }
+            
+            // 安全获取 userData 并确保是字典
+            guard let userData = annotation.userData as? [String: Any],
+                  let markerId = userData["id"] as? String else {
+                print("Error: Invalid userData or missing id in \(annotation.userData ?? [:])")
+                return
+            }
+            
+            // 打印调试信息
+            print("didAnnotationViewTapped with markerId: \(markerId)")
+            
+            // 安全调用 controller 的 onTapMarker
+            controller.onTapMarker(markerId: markerId)
+    }
+    
+    
+    
   func mapView(_ mapView: QMapView!, scaleViewChanged scale: CGFloat) {
     controller.onScaleViewChanged(scale: scale)
   }
