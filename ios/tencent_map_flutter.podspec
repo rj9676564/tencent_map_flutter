@@ -21,6 +21,10 @@ This is tencent map plugin
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
 
-  s.dependency 'Tencent-MapSDK', '~> 5.1.0'
+  s.dependency 'Tencent-MapSDK', '~> 6.3.1'
+  
+  # 腾讯定位 sdk 在 Assets 文件夹中TencentLBS.xcframework
+  s.vendored_frameworks = 'Assets/TencentLBS.xcframework'
   s.static_framework = true
+
 end
