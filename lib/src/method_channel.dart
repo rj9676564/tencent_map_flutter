@@ -200,12 +200,13 @@ class TencentMapMethodChannel {
   }
 
   /// 同意隐私协议，显示地图前必须调用
-  Future<void> agreePrivacy(bool agree, String? apiKey) {
+  Future<void> agreePrivacy(bool agree, String? apiKey, String? secretKey) {
     return _initializerChannel.invokeMethod(
       "agreePrivacy",
       <String, dynamic>{
         "agree": agree,
         "apiKey": apiKey,
+        "secretKey": secretKey,
       },
     );
   }
@@ -242,6 +243,8 @@ class TencentMapMethodChannel {
   Future<List<TencentMapGeoInfo>> poiSearchMap({
     required String city,
     required String keyWord,
+    int pageSize = 10,
+    int pageIndex = 1,
     String? apiKey,
     String? secretKey,
   }) async {
@@ -249,6 +252,8 @@ class TencentMapMethodChannel {
       final result = await _initializerChannel.invokeMethod('poiSearchMap', {
         'city': city,
         'keyWord': keyWord,
+        'pageSize': pageSize,
+        'pageIndex': pageIndex,
         'apiKey': apiKey,
         'secretKey': secretKey
       });

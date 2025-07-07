@@ -6,11 +6,12 @@ import android.util.Log
 import com.tencent.lbssearch.HttpResponseListener
 import com.tencent.lbssearch.TencentSearch
 import com.tencent.lbssearch.httpresponse.BaseObject
-import com.tencent.lbssearch.httpresponse.Poi
 import com.tencent.lbssearch.`object`.param.Geo2AddressParam
 import com.tencent.lbssearch.`object`.param.SearchParam
-import com.tencent.lbssearch.`object`.result.SearchResultObject
+import com.tencent.lbssearch.`object`.param.SuggestionParam
 import com.tencent.lbssearch.`object`.result.Geo2AddressResultObject
+import com.tencent.lbssearch.`object`.result.SearchResultObject
+import com.tencent.lbssearch.`object`.result.SuggestionResultObject
 import com.tencent.map.geolocation.TencentLocation
 import com.tencent.map.geolocation.TencentLocationListener
 import com.tencent.map.geolocation.TencentLocationManager
@@ -20,7 +21,6 @@ import com.tencent.tencentmap.mapsdk.maps.model.LatLng
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-
 
 class TencentMapSdkApi : FlutterPlugin {
     companion object {
@@ -37,7 +37,8 @@ class TencentMapSdkApi : FlutterPlugin {
             locationManager = TencentLocationManager.getInstance(binding.applicationContext)
             tencentLocationRequest = TencentLocationRequest.create()
 
-            initializerChannel.setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
+            initializerChannel.setMethodCallHandler { call: MethodCall, result: MethodChannel.Result
+                ->
                 when (call.method) {
                     "agreePrivacy" -> {
                         val agree = call.argument<Boolean>("agree") ?: false
@@ -45,11 +46,12 @@ class TencentMapSdkApi : FlutterPlugin {
 
                         val args = call.arguments as? Map<*, *>
                         if (args != null) {
-                            val options = InitOptions.getData(
-                                locationManager!!,
-                                tencentLocationRequest!!,
-                                args
-                            )
+                            val options =
+                                InitOptions.getData(
+                                    locationManager!!,
+                                    tencentLocationRequest!!,
+                                    args
+                                )
                             locationManager?.coordinateType = options.coordinateType
                             locationManager?.setMockEnable(options.mockEnable)
                         }
@@ -70,7 +72,8 @@ class TencentMapSdkApi : FlutterPlugin {
 
                                 else ->
                                     locationManager?.coordinateType =
-                                        TencentLocationManager.COORDINATE_TYPE_GCJ02 // Default
+                                        TencentLocationManager
+                                            .COORDINATE_TYPE_GCJ02 // Default
                             }
                         }
                         getLocationOnce(result)
@@ -88,7 +91,7 @@ class TencentMapSdkApi : FlutterPlugin {
                         )
                         val tencentSearch: TencentSearch =
                             TencentSearch(binding.applicationContext, apiKey, secretKey)
-                        val latLng = LatLng(latitude, longitude);
+                        val latLng = LatLng(latitude, longitude)
                         val geo2AddressParam: Geo2AddressParam = Geo2AddressParam(latLng)
                         tencentSearch.geo2address(
                             geo2AddressParam,
@@ -105,32 +108,33 @@ class TencentMapSdkApi : FlutterPlugin {
                                     }
                                     val obj: Geo2AddressResultObject =
                                         arg1 as Geo2AddressResultObject
-                                    val resultMap = HashMap<String, Any>().apply {
-                                        put("province", obj.result.ad_info.province)
-                                        put("city", obj.result.ad_info.city)
-                                        put("district", obj.result.ad_info.district)
-                                        put("address", obj.result.address)
-                                        put("title", obj.result.address)
-                                        put("latitude", latitude)
-                                        put("longitude", longitude)
-                                    }
+                                    val resultMap =
+                                        HashMap<String, Any>().apply {
+                                            put("province", obj.result.ad_info.province)
+                                            put("city", obj.result.ad_info.city)
+                                            put("district", obj.result.ad_info.district)
+                                            put("address", obj.result.address)
+                                            put("title", obj.result.address)
+                                            put("latitude", latitude)
+                                            put("longitude", longitude)
+                                        }
                                     Log.d(
                                         "TencentMapFlutter",
                                         "geo2address onSuccess" + resultMap.toString()
                                     )
                                     result.success(resultMap)
-
                                 }
 
-                                override fun onFailure(arg0: Int, arg1: String, arg2: Throwable?) {
+                                override fun onFailure(
+                                    arg0: Int,
+                                    arg1: String,
+                                    arg2: Throwable?
+                                ) {
                                     Log.e("test", "error code:" + arg0 + ", msg:" + arg1)
-                                    result.error(
-                                        arg0.toString(),
-                                        arg1,
-                                        null
-                                    )
+                                    result.error(arg0.toString(), arg1, null)
                                 }
-                            })
+                            }
+                        )
                     }
 
                     "poiSearchMap" -> {
@@ -143,24 +147,19 @@ class TencentMapSdkApi : FlutterPlugin {
                         val tencentSearch: TencentSearch =
                             TencentSearch(binding.applicationContext, apiKey, secretKey)
 
-                        // 城市搜索
-                        val region: SearchParam.Region =
-                            SearchParam.Region(city) // 设置搜索范围不扩大
-                                .autoExtend(true)
-
                         // 构建地点检索
-                        var searchParam: SearchParam =
-                            SearchParam(
-                                keyWord,
-                                region
-                            )
+                        var searchParam: SuggestionParam = SuggestionParam(keyWord, city)
                         searchParam.pageSize(pageSize)
                         searchParam.pageIndex(pageIndex)
 
-                        tencentSearch.search(
+                        tencentSearch.suggestion(
                             searchParam,
                             object : HttpResponseListener<BaseObject?> {
-                                override fun onFailure(arg0: Int, arg2: String?, arg3: Throwable?) {
+                                override fun onFailure(
+                                    arg0: Int,
+                                    arg2: String?,
+                                    arg3: Throwable?
+                                ) {
                                     val errorDetails =
                                         HashMap<String, Any?>().apply {
                                             put("code", arg0)
@@ -175,7 +174,7 @@ class TencentMapSdkApi : FlutterPlugin {
                                 }
 
                                 override fun onSuccess(arg0: Int, arg1: BaseObject?) {
-                                    if (arg1 == null || arg1 !is SearchResultObject) {
+                                    if (arg1 == null || arg1 !is SuggestionResultObject) {
                                         val errorResult =
                                             HashMap<String, Any>().apply {
                                                 put("code", -1)
@@ -185,7 +184,7 @@ class TencentMapSdkApi : FlutterPlugin {
                                         return
                                     }
 
-                                    val obj = arg1 as SearchResultObject
+                                    val obj = arg1 as SuggestionResultObject
                                     if (obj.data == null || obj.data.isEmpty()) {
                                         val errorResult =
                                             HashMap<String, Any>().apply {
@@ -197,13 +196,15 @@ class TencentMapSdkApi : FlutterPlugin {
                                     }
 
                                     // 格式化POI搜索结果
-                                    val poiList =
-                                        obj.data.map { data ->
+                                    val poiList = obj.data.map { data ->
                                             HashMap<String, Any?>().apply {
                                                 put("title", data.title)
                                                 put("address", data.address)
                                                 put("latitude", data.latLng.latitude)
                                                 put("longitude", data.latLng.longitude)
+                                                put("city", data.city)
+                                                put("province", data.province)
+                                                put("district", data.district)
                                             }
                                         }
 

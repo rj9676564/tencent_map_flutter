@@ -169,7 +169,8 @@ class TencentMap extends StatefulWidget {
       {bool agreePrivacy = false, String? apiKey, String? secretKey}) {
     TencentMap.apiKey = apiKey;
     TencentMap.secretKey = secretKey;
-    return TencentMapMethodChannel.instance.agreePrivacy(agreePrivacy, apiKey);
+    return TencentMapMethodChannel.instance
+        .agreePrivacy(agreePrivacy, apiKey, secretKey);
   }
 
 //   once location
@@ -180,6 +181,8 @@ class TencentMap extends StatefulWidget {
   static Future<List<TencentMapGeoInfo>> poiSearchMap({
     required String city,
     required String keyWord,
+    String? apiKey,
+    String? secretKey,
   }) async {
     return TencentMapMethodChannel.instance.poiSearchMap(
         city: city,
