@@ -8,9 +8,7 @@ import com.tencent.lbssearch.TencentSearch
 import com.tencent.lbssearch.httpresponse.BaseObject
 import com.tencent.lbssearch.`object`.param.Geo2AddressParam
 import com.tencent.lbssearch.`object`.param.SearchParam
-import com.tencent.lbssearch.`object`.param.SuggestionParam
 import com.tencent.lbssearch.`object`.result.Geo2AddressResultObject
-import com.tencent.lbssearch.`object`.result.SearchResultObject
 import com.tencent.lbssearch.`object`.result.SuggestionResultObject
 import com.tencent.map.geolocation.TencentLocation
 import com.tencent.map.geolocation.TencentLocationListener
@@ -147,12 +145,16 @@ class TencentMapSdkApi : FlutterPlugin {
                         val tencentSearch: TencentSearch =
                             TencentSearch(binding.applicationContext, apiKey, secretKey)
 
+
+                        //城市搜索
+                        val region: SearchParam.Region =
+                            SearchParam.Region(city).autoExtend(true)
                         // 构建地点检索
-                        var searchParam: SuggestionParam = SuggestionParam(keyWord, city)
+                        var searchParam: SearchParam = SearchParam(keyWord, region)
                         searchParam.pageSize(pageSize)
                         searchParam.pageIndex(pageIndex)
 
-                        tencentSearch.suggestion(
+                        tencentSearch.search(
                             searchParam,
                             object : HttpResponseListener<BaseObject?> {
                                 override fun onFailure(

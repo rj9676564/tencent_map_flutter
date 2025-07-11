@@ -131,11 +131,12 @@ class TencentMapSdkApi: NSObject, QMSSearchDelegate {
                 QMSSearchServices.shared().secretKey = secretKey
                 TencentMapSdkApi.pendingResult = result
                 
-                let option = QMSSuggestionSearchOption()
+                let option = QMSPoiSearchOption()
                 option.keyword = keyWord
-                option.region = city
-                
-                TencentMapSdkApi.search?.searchWithSuggestionSearchOption(option)
+
+                option.setBoundaryByRegionWithCityName(city, autoExtend: true)
+                TencentMapSdkApi.search?.searchWithPoiSearchOption(option)
+//                TencentMapSdkApi.search?.searchWithSuggestionSearchOption(option)
                 
             default:
                 result(FlutterMethodNotImplemented)
